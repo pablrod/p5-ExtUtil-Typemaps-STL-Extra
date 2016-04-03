@@ -3,6 +3,7 @@ package ExtUtils::Typemaps::STL::Extra;
 use 5.006;
 use strict;
 use warnings;
+use ExtUtils::Typemaps;
 
 =head1 NAME
 
@@ -15,39 +16,82 @@ Version 0.01
 =cut
 
 our $VERSION = '0.01';
-
+our @ISA = qw(ExtUtils::Typemaps);
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
     use ExtUtils::Typemaps::STL::Extra;
 
-    my $foo = ExtUtils::Typemaps::STL::Extra->new();
     ...
 
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
-=head1 SUBROUTINES/METHODS
-
-=head2 function1
-
 =cut
 
-sub function1 {
+sub new {
+	my $class = shift;
+
+	my $self = $class->SUPER::new(@_);
+
+	my $typemap = << 'END_TYPEMAP';
+
+TYPEMAP
+	T_STD_VECTOR_STD_VECTOR_DOUBLE
+INPUT
+	if (SvROK($arg) && SvTYPE(SvRV($arg))==SVt_PVAV) {
+          AV* av = (AV*)SvRV($arg);
+          const unsigned int len = av_len(av)+1;
+          $var = std::vector<std::vector<double>>(len);
+          SV** elem;
+          for (unsigned int i = 0; i < len; i++) {
+            elem = av_fetch(av, i, 0);
+            if (elem != NULL && SvROK(*elem) && SvTYPE(SvRV(*elem))==SVt_PVAV) {
+            
+               AV* av_inner = (AV*)SvRV(*elem);
+               const unsigned int len_j = av_len(av_inner) + 1;
+               std::vector<double> inner_vector(len_j);
+               SV** inner_elem;
+               for (unsigned int j = 0; j < len_j; j++) {
+                    inner_elem = av_fetch(av_inner, j, 0);
+                    if (inner_elem != NULL) 
+                        inner_vector[j] =  SvNV(*inner_elem);
+                    else 
+                        inner_vector[j] = 0;
+               }
+               ${var}[i] = inner_vector;
+            }
+            else
+              ${var}[i] = std::vector<double>();
+          }
+        }
+        else
+          Perl_croak(aTHX_ \"%s: %s is not an array reference\",
+                     ${$ALIAS?\q[GvNAME(CvGV(cv))]:\qq[\"$pname\"]},
+                     \"$var\");
+
+OUTPUT
+	AV* av = newAV();
+        $arg = newRV_noinc((SV*)av);
+        const unsigned int len = $var.size();
+        if (len)
+          av_extend(av, len-1);
+        for (unsigned int i = 0; i < len; i++) {
+            const unsigned int len_j = ${var}[i].size();
+            AV *inner_av = newAV();
+            if (len_j) av_extend(inner_av, len_j - 1);
+            for (unsigned int j = 0; j < len_j; j++) {
+                av_store(inner_av, j, newSVnv(${var}[i][j])); 
+            }
+            av_store(av, i, newRV_noinc((SV*)av));
+        }
+END_TYPEMAP
+	
+
+	$self->add_string(string => $typemap);
+	return $self;
 }
 
-=head2 function2
+1; # End of ExtUtils::Typemaps::STL::Extra
 
-=cut
-
-sub function2 {
-}
+__END__
 
 =head1 AUTHOR
 
@@ -138,4 +182,3 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
-1; # End of ExtUtils::Typemaps::STL::Extra
