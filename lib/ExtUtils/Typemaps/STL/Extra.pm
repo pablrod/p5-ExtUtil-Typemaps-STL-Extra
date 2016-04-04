@@ -7,7 +7,7 @@ use ExtUtils::Typemaps;
 
 =head1 NAME
 
-ExtUtils::Typemaps::STL::Extra - The great new ExtUtils::Typemaps::STL::Extra!
+ExtUtils::Typemaps::STL::Extra - Extra typemaps for STL types
 
 =head1 VERSION
 
@@ -20,9 +20,20 @@ our @ISA = qw(ExtUtils::Typemaps);
 
 =head1 SYNOPSIS
 
-    use ExtUtils::Typemaps::STL::Extra;
+    use Module::Build::WithXSpp;
+ 
+    my $build = Module::Build::WithXSpp->new(
+		extra_typemap_modules => {
+    			'ExtUtils::Typemaps::STL::Extra' => '0'
+			},
+	);
 
-    ...
+=head1 DESCRIPTION
+
+This module add extra typemaps for STL types to make it easier wrapping C++ using L<ExtUtils::XSpp>
+
+
+=head1 METHODS
 
 =cut
 
@@ -31,11 +42,13 @@ sub new {
 
 	my $self = $class->SUPER::new(@_);
 
-	my $typemap = << 'END_TYPEMAP';
-
+	my $typemap = <<'END_TYPEMAP';
 TYPEMAP
-	T_STD_VECTOR_STD_VECTOR_DOUBLE
+std::vector<std::vector<double> >	T_STD_VECTOR_STD_VECTOR_DOUBLE
+
 INPUT
+
+T_STD_VECTOR_STD_VECTOR_DOUBLE
 	if (SvROK($arg) && SvTYPE(SvRV($arg))==SVt_PVAV) {
           AV* av = (AV*)SvRV($arg);
           const unsigned int len = av_len(av)+1;
@@ -68,6 +81,8 @@ INPUT
                      \"$var\");
 
 OUTPUT
+
+T_STD_VECTOR_STD_VECTOR_DOUBLE
 	AV* av = newAV();
         $arg = newRV_noinc((SV*)av);
         const unsigned int len = $var.size();
@@ -80,12 +95,15 @@ OUTPUT
             for (unsigned int j = 0; j < len_j; j++) {
                 av_store(inner_av, j, newSVnv(${var}[i][j])); 
             }
-            av_store(av, i, newRV_noinc((SV*)av));
+            av_store(av, i, newRV_noinc((SV*)inner_av));
         }
+
+
 END_TYPEMAP
 	
 
 	$self->add_string(string => $typemap);
+	#die $typemap;
 	return $self;
 }
 
@@ -99,42 +117,15 @@ Pablo Rodríguez González, C<< <pablrod at cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-extutils-typemaps-stl-extra at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=ExtUtils-Typemaps-STL-Extra>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests via github: L<https://github.com/pablrod/p5-ExtUtil-Typemaps-STL-Extra/issues>
 
+=head1 SEE ALSO
 
+ExtUtils::XSpp
 
+Module::Build::WithXSpp
 
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc ExtUtils::Typemaps::STL::Extra
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-Typemaps-STL-Extra>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/ExtUtils-Typemaps-STL-Extra>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/ExtUtils-Typemaps-STL-Extra>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/ExtUtils-Typemaps-STL-Extra/>
-
-=back
-
+ExtUtils::Typemaps::Default
 
 =head1 ACKNOWLEDGEMENTS
 
