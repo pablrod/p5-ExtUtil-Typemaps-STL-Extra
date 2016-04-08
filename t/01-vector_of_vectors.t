@@ -6,9 +6,13 @@ use Test::Most tests => 1;
 use Module::Build::WithXSpp;
 use Data::Dumper;
 
+chdir('t/01-vector_of_vectors');
+
 my $builder = Module::Build::WithXSpp->new(
 	module_name => 'test_vector_of_vectors',
 	license => 'perl',
+	dist_version => '0.01',
+	#pm_files => {'t/01-vector_of_vectors/lib/test_vector_of_vectors.pm' => 'lib/test_vector_of_vectors.pm'},
 'build_requires' => {
     'ExtUtils::Typemaps::Default' => '1.05',
     'ExtUtils::XSpp' => '0.18',
@@ -25,7 +29,9 @@ my $builder = Module::Build::WithXSpp->new(
     #'ExtUtils::Typemaps::Default' => '1.05',
     'ExtUtils::Typemaps::STL::Extra' => '0',
   },
-  cpp_source_dirs => [qw(test_vector_of_vectors)]
+  cpp_source_dirs => [qw(src)],
+  extra_xs_dirs => [qw(xsp)]
+
 );
 
 $builder->create_build_script();
