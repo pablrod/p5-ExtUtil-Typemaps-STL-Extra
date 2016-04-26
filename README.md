@@ -1,49 +1,24 @@
+# NAME
+
 ExtUtils-Typemaps-STL-Extra
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+# SYNOPSYS
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it to get an idea of the module's uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+    use Module::Build::WithXSpp;
+ 
+    my $build = Module::Build::WithXSpp->new(
+	extra_typemap_modules => {
+    	    'ExtUtils::Typemaps::STL::Extra' => '0'
+	    },
+	);
 
+# DESCRIPTION
 
-INSTALLATION
+This module add extra typemaps for C++ STL bindings. 
 
-To install this module, run the following commands:
+It's a little bit of help for wrapping your fancy C++ library, which is using the STL containers and your instantiation isn't in https://metacpan.org/pod/ExtUtils::Typemaps::Default  
 
-	perl Build.PL
-	./Build
-	./Build test
-	./Build install
-
-SUPPORT AND DOCUMENTATION
-
-After installing, you can find documentation for this module with the
-perldoc command.
-
-    perldoc ExtUtils::Typemaps::STL::Extra
-
-You can also look for information at:
-
-    RT, CPAN's request tracker (report bugs here)
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-Typemaps-STL-Extra
-
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/ExtUtils-Typemaps-STL-Extra
-
-    CPAN Ratings
-        http://cpanratings.perl.org/d/ExtUtils-Typemaps-STL-Extra
-
-    Search CPAN
-        http://search.cpan.org/dist/ExtUtils-Typemaps-STL-Extra/
-
-
-LICENSE AND COPYRIGHT
+# LICENSE AND COPYRIGHT
 
 Copyright (C) 2016 Pablo Rodríguez González
 
