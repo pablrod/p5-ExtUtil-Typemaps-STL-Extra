@@ -1,32 +1,54 @@
 # NAME
 
-ExtUtils-Typemaps-STL-Extra
+ExtUtils::Typemaps::STL::Extra - Extra typemaps for STL types
 
-# SYNOPSYS
+# VERSION
 
-    use Module::Build::WithXSpp;
- 
-    my $build = Module::Build::WithXSpp->new(
-	extra_typemap_modules => {
-    	    'ExtUtils::Typemaps::STL::Extra' => '0'
-	    },
-	);
+Version 0.01
+
+# SYNOPSIS
+
+       use Module::Build::WithXSpp;
+    
+       my $build = Module::Build::WithXSpp->new(
+                   extra_typemap_modules => {
+                           'ExtUtils::Typemaps::STL::Extra' => '0'
+                           },
+           );
 
 # DESCRIPTION
 
-This module add extra typemaps for C++ STL bindings. 
+This module add extra typemaps for STL types to make it easier wrapping C++ using [ExtUtils::XSpp](https://metacpan.org/pod/ExtUtils::XSpp)
 
-It's a little bit of help for wrapping your fancy C++ library, which is using the STL containers and your instantiation isn't in https://metacpan.org/pod/ExtUtils::Typemaps::Default  
+# METHODS
+
+# AUTHOR
+
+Pablo Rodríguez González, `<pablrod at cpan.org>`
+
+# BUGS
+
+Please report any bugs or feature requests via github: [https://github.com/pablrod/p5-ExtUtils-Typemaps-STL-Extra/issues](https://github.com/pablrod/p5-ExtUtils-Typemaps-STL-Extra/issues)
+
+# SEE ALSO
+
+ExtUtils::XSpp
+
+Module::Build::WithXSpp
+
+ExtUtils::Typemaps::Default
+
+# ACKNOWLEDGEMENTS
 
 # LICENSE AND COPYRIGHT
 
-Copyright (C) 2016 Pablo Rodríguez González
+Copyright 2016 Pablo Rodríguez González.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the the Artistic License (2.0). You may obtain a
 copy of the full license at:
 
-L<http://www.perlfoundation.org/artistic_license_2_0>
+[http://www.perlfoundation.org/artistic\_license\_2\_0](http://www.perlfoundation.org/artistic_license_2_0)
 
 Any use, modification, and distribution of the Standard or Modified
 Versions is governed by this Artistic License. By using, modifying or
@@ -57,4 +79,3 @@ YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
 CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
 CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-

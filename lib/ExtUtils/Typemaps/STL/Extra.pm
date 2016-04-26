@@ -117,7 +117,7 @@ Pablo Rodríguez González, C<< <pablrod at cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests via github: L<https://github.com/pablrod/p5-ExtUtil-Typemaps-STL-Extra/issues>
+Please report any bugs or feature requests via github: L<https://github.com/pablrod/p5-ExtUtils-Typemaps-STL-Extra/issues>
 
 =head1 SEE ALSO
 
