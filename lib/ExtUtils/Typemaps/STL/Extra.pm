@@ -40,6 +40,12 @@ This module add extra typemaps for STL types to make it easier wrapping C++ usin
 
 =cut
 
+=head2 new
+
+Creates a new ExtUtils::Typemaps::STL::Extra object. It acts as any other ExtUtils::Typemaps object, except that it has the extra type maps initialized.
+
+=cut
+
 sub new {
 	my $class = shift;
 
