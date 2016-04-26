@@ -1,0 +1,8 @@
+#include "map_of_strings_strings.hpp"
+
+%module{test_map_of_strings_strings};
+
+%loadplugin{feature::default_xs_typemap};
+
+%name{test_map_of_strings_strings::check_map_of_strings_strings} std::map<std::string, std::string> check_map_of_strings_strings(
+	std::map<std::string, std::string> argument);

@@ -45,6 +45,7 @@ sub new {
 	my $typemap = <<'END_TYPEMAP';
 TYPEMAP
 std::vector<std::vector<double> >	T_STD_VECTOR_STD_VECTOR_DOUBLE
+std::map<std::string, std::string>	T_STD_MAP_STD_STRING_STD_STRING
 
 INPUT
 
@@ -80,6 +81,26 @@ T_STD_VECTOR_STD_VECTOR_DOUBLE
                      ${$ALIAS?\q[GvNAME(CvGV(cv))]:\qq[\"$pname\"]},
                      \"$var\");
 
+
+T_STD_MAP_STD_STRING_STD_STRING
+	if (SvROK($arg) && SvTYPE(SvRV($arg))==SVt_PVHV) {
+          HV* hv = (HV*)SvRV($arg);
+          $var = std::map<std::string, std::string>();
+          I32 number_of_elements = hv_iterinit(hv);
+          SV *elemento = NULL;
+          char *key;
+          int keylength;
+          while (elemento = hv_iternextsv(hv, &key, &keylength)) {
+                $var.insert(std::pair<std::string, std::string >(std::string(key, keylength), 
+                                   std::string(SvPV_nolen(elemento), SvCUR(elemento)))); 
+          }
+        }
+        else
+          Perl_croak(aTHX_ \"%s: %s is not a hash reference\",
+                     ${$ALIAS?\q[GvNAME(CvGV(cv))]:\qq[\"$pname\"]},
+                     \"$var\");
+
+
 OUTPUT
 
 T_STD_VECTOR_STD_VECTOR_DOUBLE
@@ -96,6 +117,14 @@ T_STD_VECTOR_STD_VECTOR_DOUBLE
                 av_store(inner_av, j, newSVnv(${var}[i][j])); 
             }
             av_store(av, i, newRV_noinc((SV*)inner_av));
+        }
+
+
+T_STD_MAP_STD_STRING_STD_STRING
+	HV* hv = newHV();
+        $arg = newRV_noinc((SV*)hv);
+        for (std::map< std::string, std::string >::const_iterator elemento_map = ${var}.cbegin(); elemento_map != ${var}.cend(); ++elemento_map) {
+           hv_store(hv, elemento_map->first.c_str(), elemento_map->first.length(), newSVpvn(elemento_map->second.c_str(), elemento_map->second.length()), 0); 
         }
 
 
