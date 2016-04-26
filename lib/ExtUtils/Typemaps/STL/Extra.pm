@@ -3,6 +3,7 @@ package ExtUtils::Typemaps::STL::Extra;
 use 5.006;
 use strict;
 use warnings;
+use utf8;
 use ExtUtils::Typemaps;
 
 =head1 NAME
