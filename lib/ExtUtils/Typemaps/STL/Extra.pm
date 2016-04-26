@@ -6,6 +6,8 @@ use warnings;
 use utf8;
 use ExtUtils::Typemaps;
 
+=encoding utf-8
+
 =head1 NAME
 
 ExtUtils::Typemaps::STL::Extra - Extra typemaps for STL types
